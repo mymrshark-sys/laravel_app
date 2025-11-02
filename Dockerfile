@@ -53,3 +53,8 @@ EXPOSE 80
 
 # Start supervisor
 CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+
+# Storage permission
+RUN mkdir -p storage/logs \
+    && chown -R www-data:www-data storage bootstrap/cache \
+    && chmod -R 775 storage bootstrap/cache

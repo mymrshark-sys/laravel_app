@@ -1,0 +1,33 @@
+# Gunakan base image PHP-FPM
+FROM php:8.3-fpm
+
+# Set working directory
+WORKDIR /var/www/html
+
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    git zip unzip libpng-dev libonig-dev libxml2-dev libzip-dev curl && \
+    docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Copy Composer dari image resmi
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Copy source code
+COPY . .
+
+# Install dependencies
+RUN composer install --no-dev --optimize-autoloader --no-interaction
+
+# Set permission untuk storage dan cache
+RUN chmod -R 775 storage bootstrap/cache || true
+
+# Expose Railway port
+EXPOSE 8000
+
+# Copy and use start script
+COPY start.sh .
+RUN chmod +x start.sh
+
+# Start Laravel
+CMD ["./start.sh"]

@@ -22,9 +22,6 @@ RUN composer install --no-dev --optimize-autoloader
 # Link storage
 RUN php artisan storage:link || true
 
-# Generate key
-RUN php artisan key:generate
-
 # Expose port
 EXPOSE 8000
 

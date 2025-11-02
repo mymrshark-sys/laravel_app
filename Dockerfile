@@ -52,7 +52,7 @@ RUN npm install && npm run build
 EXPOSE 80
 
 # Start supervisor
-CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+CMD php artisan serve --host=0.0.0.0 --port=${PORT}
 
 # Storage permission
 RUN mkdir -p storage/logs \
